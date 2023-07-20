@@ -11,8 +11,8 @@ const poppins = Poppins({
 
 const MainLayout = ({children} :{children: React.ReactNode}) => {
   return (
-    <html lang="en">
-      <body className={poppins.className}>
+    <html lang="en" className={poppins.className}>
+      <body style={{margin: 0}}>
         <Header />
         <main>
             {children}
