@@ -1,4 +1,5 @@
 import MainLayout from "@/layout/MainLayout";
+import "./global.css";
 
 export default function RootLayout({
   children,
