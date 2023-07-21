@@ -6,7 +6,7 @@ const ConnectionCard = (props: any) => {
   const { id } = props;
   const connection = connections.find((el) => el.id === id);
   if (!connection) return <p>Error</p>;
-  return <div className="border-2 rounded-lg p-4 relative h-[120px] hover:border-black">
+  return <div className="shadow-lg border rounded-lg p-4 relative h-[120px] hover:border-black">
     <a href="#">{connection.name}</a>
 
         <button className="absolute bottom-2 right-2 hover:text-red-600">
