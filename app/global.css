@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+tr {
+    border-bottom-width: 1px;
+}
+
+th, td {
+    padding: 1rem;
+}
