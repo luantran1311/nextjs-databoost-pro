@@ -17,8 +17,9 @@ const getTreeItemsFromData = (treeItems: any) => {
         key={treeItemData.id}
         nodeId={treeItemData.id}
         label={treeItemData.name}
-        children={children}
-      />
+      >
+        {children}
+      </TreeItem>
     );
   });
 };
