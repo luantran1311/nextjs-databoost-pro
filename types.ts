@@ -1,5 +1,5 @@
 export interface CategoryTree {
-    id: string;
+    id: number;
     name: string;
-    //childrenCategory: CategoryTree[];
+    children: CategoryTree[];
 }

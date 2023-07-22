@@ -14,7 +14,9 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { SvgIconProps } from "@mui/material/SvgIcon";
-import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
+import { CategoryTree } from "@/types";
+import DataTreeView from "./SeasonsTreeView";
 
 declare module "react" {
   interface CSSProperties {
@@ -93,7 +95,11 @@ function StyledTreeItem(props: StyledTreeItemProps) {
             pr: 0,
           }}
         >
-          <Box component={FolderOpenOutlinedIcon} color="inherit" sx={{ mr: 1 }} />
+          <Box
+            component={FolderOpenOutlinedIcon}
+            color="inherit"
+            sx={{ mr: 1 }}
+          />
           <Typography
             variant="body2"
             sx={{ fontWeight: "inherit", flexGrow: 1 }}
@@ -111,38 +117,50 @@ function StyledTreeItem(props: StyledTreeItemProps) {
   );
 }
 
-export default function CategoryTreeView({
-  categoryTree,
-}: {
-  categoryTree: any[];
-}) {
+const categoryTree: CategoryTree[] = [
+  {
+    id: 1,
+    name: "Shop By Category",
+    children: [
+      {
+        id: 2,
+        name: "Mobile Phones",
+        children: [
+          {
+            id: 3,
+            name: "Apple",
+            children: [],
+          },
+          {
+            id: 4,
+            name: "Samsung",
+            children: [],
+          },
+        ],
+      },
+      {
+        id: 5,
+        name: "Tablets",
+        children: [
+          {
+            id: 6,
+            name: "Apple",
+            children: [],
+          },
+          {
+            id: 7,
+            name: "Samsung",
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export default function CategoryTreeView() {
   return (
-    <TreeView
-      aria-label="gmail"
-      defaultExpanded={["3"]}
-      defaultCollapseIcon={<ArrowDropDownIcon />}
-      defaultExpandIcon={<ArrowRightIcon />}
-      defaultEndIcon={<div style={{ width: 24 }} />}
-      sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: "auto" }}
-    >
-      <StyledTreeItem nodeId="1" labelText="All Mail" />
-      <StyledTreeItem nodeId="2" labelText="Trash"  />
-      <StyledTreeItem nodeId="3" labelText="Categories">
-        <StyledTreeItem
-          nodeId="5"
-          labelText="Social"
 
-        />
-        <StyledTreeItem nodeId="6" labelText="Updates">
-          <StyledTreeItem nodeId="7" labelText="Forums"/>
-          <StyledTreeItem
-            nodeId="8"
-            labelText="Promotions"
-
-          />
-        </StyledTreeItem>
-      </StyledTreeItem>
-      <StyledTreeItem nodeId="4" labelText="History" />
-    </TreeView>
+      <DataTreeView />
   );
 }

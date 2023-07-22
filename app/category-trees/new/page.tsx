@@ -6,7 +6,6 @@ import { DocumentIcon } from "@heroicons/react/24/solid";
 import Papa from "papaparse";
 import React, { useCallback, useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
-import { useCSVReader } from "react-papaparse";
 
 const CategoryTreeAdd = () => {
   const onDrop = useCallback((acceptedFiles: any) => {
@@ -36,8 +35,18 @@ const CategoryTreeAdd = () => {
   const [processedTreeArr, setProcessedTreeArr] = useState<CategoryTree[]>([]);
 
   const handleConvert = (treeArr: any[]) => {
-    const processedTreeArr: CategoryTree[] = treeArr.map((tree: any) => {
-      return { id: tree[1], name: tree[2] };
+    const processedTreeArr: CategoryTree[] = [];
+    treeArr.forEach((tree: any, index: number) => {
+      //skip header
+      if(index > 0) {
+        const [parentId, id, name] = tree;
+        //if a category belongs to a parent
+        if(parentId) {
+          console.log('parentid',processedTreeArr)
+        }
+        else
+        processedTreeArr.push({ id: tree[1], name: tree[2], children: [] });
+      }
     });
     console.log(processedTreeArr);
     setProcessedTreeArr(processedTreeArr);
@@ -152,7 +161,7 @@ const CategoryTreeAdd = () => {
                     {/* {processedTreeArr.map((tree : CategoryTree, index: number) => (
                       <p key={tree.id}>{tree.name}</p>  
                     ))} */}
-                    <CategoryTreeView categoryTree={[]} />
+                    <CategoryTreeView />
                     </div>
               </div>
             }
