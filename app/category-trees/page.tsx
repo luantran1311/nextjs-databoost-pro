@@ -16,12 +16,6 @@ const ItemRow = ({ tree }: { tree: any }) => {
 
     const [dropdownActive, setDropDownActive] = useState(false);
 
-    // useOutsideClick(ref.current, () => {
-    //     console.log(dropdownActive)
-    //     if(dropdownActive)
-    //     setDropDownActive(false);
-    // });
-
     const showActionDropDown = () => {
         setDropDownActive(true);
     };

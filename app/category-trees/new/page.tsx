@@ -1,6 +1,7 @@
 "use client";
 
 import CategoryTreeView from "@/components/CategoryTreeView";
+import { buildObjectFromArray } from "@/lib/utils";
 import { CategoryTree } from "@/types";
 import { DocumentIcon } from "@heroicons/react/24/solid";
 import Papa from "papaparse";
@@ -14,6 +15,8 @@ const CategoryTreeAdd = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
   });
+  const [processedTreeArr, setProcessedTreeArr] = useState<CategoryTree[]>([]);
+  const [parentCategoryIDs, setParentCategoryIDs] = useState<number[]>([]);
 
   const handleParse = (fileToProcess: any) => {
     const config = {
@@ -21,8 +24,11 @@ const CategoryTreeAdd = () => {
       complete: (results: any, file: File) => {
         // 0: (3) ['Parent Category ID', 'Category ID', 'Category Name']
         // 1: (3) ['', '1', 'Mobile Phones']
-        console.log("Parsing complete:", results.data, file);
-        handleConvert(results.data);
+        //remove header line
+        const noHeaderData = results.data.splice(1);
+        const data = buildObjectFromArray(noHeaderData);
+
+        setProcessedTreeArr(data);
       },
       error: (error: any, file: File) => {
         console.log("error", error);
@@ -30,26 +36,6 @@ const CategoryTreeAdd = () => {
     };
 
     Papa.parse(fileToProcess, config);
-  };
-
-  const [processedTreeArr, setProcessedTreeArr] = useState<CategoryTree[]>([]);
-
-  const handleConvert = (treeArr: any[]) => {
-    const processedTreeArr: CategoryTree[] = [];
-    treeArr.forEach((tree: any, index: number) => {
-      //skip header
-      if(index > 0) {
-        const [parentId, id, name] = tree;
-        //if a category belongs to a parent
-        if(parentId) {
-          console.log('parentid',processedTreeArr)
-        }
-        else
-        processedTreeArr.push({ id: tree[1], name: tree[2], children: [] });
-      }
-    });
-    console.log(processedTreeArr);
-    setProcessedTreeArr(processedTreeArr);
   };
 
   const [file, setFile] = useState(null);
@@ -92,14 +78,13 @@ const CategoryTreeAdd = () => {
                 Category Upload
               </label>
               <p className="mt-1 text-sm leading-6 text-gray-600">
-                Download {" "}
+                Download{" "}
                 <a href="#" className="text-blue-600 underline" download={true}>
-                sample import file
+                  sample import file
                 </a>
               </p>
               <Dropzone
                 onDrop={(acceptedFiles: any[]) => {
-                  console.log("file", acceptedFiles[0]);
                   setFile(acceptedFiles[0]);
                   handleParse(acceptedFiles[0]);
                 }}
@@ -114,7 +99,6 @@ const CategoryTreeAdd = () => {
                       name="file-upload"
                       type="file"
                       className="sr-only"
-                      onChange={() => console.log("file changed")}
                       {...getInputProps()}
                     />
 
@@ -149,8 +133,8 @@ const CategoryTreeAdd = () => {
                 )}
               </Dropzone>
             </div>
-            {
-                (processedTreeArr && processedTreeArr.length > 0) && <div className="col-span-full">
+            {processedTreeArr && processedTreeArr.length > 0 && (
+              <div className="col-span-full">
                 <label
                   htmlFor="category-tree-upload"
                   className="block text-sm leading-6 text-gray-900 font-bold"
@@ -158,13 +142,12 @@ const CategoryTreeAdd = () => {
                   Preview
                 </label>
                 <div className="preview">
-                    {/* {processedTreeArr.map((tree : CategoryTree, index: number) => (
-                      <p key={tree.id}>{tree.name}</p>  
-                    ))} */}
-                    <CategoryTreeView />
-                    </div>
+                  {processedTreeArr && (
+                    <CategoryTreeView categoryTree={processedTreeArr} />
+                  )}
+                </div>
               </div>
-            }
+            )}
           </div>
         </form>
       </div>

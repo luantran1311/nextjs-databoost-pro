@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <div className="bg-zinc-900">
+    <div className="bg-zinc-700 sticky top-0">
       <div className="wrapper flex justify-between p-6">
         <div className="left">
           <p className="text-white text-2xl font-bold">DataBoostPro</p>

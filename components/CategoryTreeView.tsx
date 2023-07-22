@@ -1,166 +1,53 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
+"use client";
+
+import React, { useState } from "react";
 import TreeView from "@mui/lab/TreeView";
-import TreeItem, { TreeItemProps, treeItemClasses } from "@mui/lab/TreeItem";
-import Typography from "@mui/material/Typography";
-import MailIcon from "@mui/icons-material/Mail";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Label from "@mui/icons-material/Label";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import InfoIcon from "@mui/icons-material/Info";
-import ForumIcon from "@mui/icons-material/Forum";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { SvgIconProps } from "@mui/material/SvgIcon";
-import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
-import { CategoryTree } from "@/types";
-import DataTreeView from "./SeasonsTreeView";
+import TreeItem from "@mui/lab/TreeItem";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-declare module "react" {
-  interface CSSProperties {
-    "--tree-view-color"?: string;
-    "--tree-view-bg-color"?: string;
-  }
-}
-
-type StyledTreeItemProps = TreeItemProps & {
-  bgColor?: string;
-  bgColorForDarkMode?: string;
-  color?: string;
-  colorForDarkMode?: string;
-  labelInfo?: string;
-  labelText: string;
+const getTreeItemsFromData = (treeItems: any) => {
+  return treeItems.map((treeItemData: any) => {
+    let children;
+    if (treeItemData.children && treeItemData.children.length > 0) {
+      children = getTreeItemsFromData(treeItemData.children);
+    }
+    return (
+      <TreeItem
+        key={treeItemData.id}
+        nodeId={treeItemData.id}
+        label={treeItemData.name}
+        children={children}
+      />
+    );
+  });
 };
 
-const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  [`& .${treeItemClasses.content}`]: {
-    color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    "&.Mui-expanded": {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    "&:hover": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    "&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused": {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-      color: "var(--tree-view-color)",
-    },
-    [`& .${treeItemClasses.label}`]: {
-      fontWeight: "inherit",
-      color: "inherit",
-    },
-  },
-  [`& .${treeItemClasses.group}`]: {
-    marginLeft: 0,
-    [`& .${treeItemClasses.content}`]: {
-      paddingLeft: theme.spacing(2),
-    },
-  },
-}));
+const CategoryTreeView = ({ categoryTree }: { categoryTree: any[] }) => {
+  //category id from 0 to 1000
+  const arr = [...Array(1000)].map((x, i) => i);
 
-function StyledTreeItem(props: StyledTreeItemProps) {
-  const theme = useTheme();
-  const {
-    bgColor,
-    color,
-    labelInfo,
-    labelText,
-    colorForDarkMode,
-    bgColorForDarkMode,
-    ...other
-  } = props;
+  const [expanded, setExpanded] = useState<any[]>([]);
 
-  const styleProps = {
-    "--tree-view-color":
-      theme.palette.mode !== "dark" ? color : colorForDarkMode,
-    "--tree-view-bg-color":
-      theme.palette.mode !== "dark" ? bgColor : bgColorForDarkMode,
+  const handleExpandClick = () => {
+    setExpanded((oldExpanded) => (oldExpanded.length === 0 ? arr : []));
   };
 
   return (
-    <StyledTreeItemRoot
-      label={
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            p: 0.5,
-            pr: 0,
-          }}
-        >
-          <Box
-            component={FolderOpenOutlinedIcon}
-            color="inherit"
-            sx={{ mr: 1 }}
-          />
-          <Typography
-            variant="body2"
-            sx={{ fontWeight: "inherit", flexGrow: 1 }}
-          >
-            {labelText}
-          </Typography>
-          <Typography variant="caption" color="inherit">
-            {labelInfo}
-          </Typography>
-        </Box>
-      }
-      style={styleProps}
-      {...other}
-    />
+    <>
+      {" "}
+      <button type="button" onClick={handleExpandClick}>
+        {expanded.length === 0 ? "Expand all" : "Collapse all"}
+      </button>
+      <TreeView
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpandIcon={<ChevronRightIcon />}
+        expanded={expanded}
+      >
+        {getTreeItemsFromData(categoryTree)}
+      </TreeView>
+    </>
   );
-}
+};
 
-const categoryTree: CategoryTree[] = [
-  {
-    id: 1,
-    name: "Shop By Category",
-    children: [
-      {
-        id: 2,
-        name: "Mobile Phones",
-        children: [
-          {
-            id: 3,
-            name: "Apple",
-            children: [],
-          },
-          {
-            id: 4,
-            name: "Samsung",
-            children: [],
-          },
-        ],
-      },
-      {
-        id: 5,
-        name: "Tablets",
-        children: [
-          {
-            id: 6,
-            name: "Apple",
-            children: [],
-          },
-          {
-            id: 7,
-            name: "Samsung",
-            children: [],
-          },
-        ],
-      },
-    ],
-  },
-];
-
-export default function CategoryTreeView() {
-  return (
-
-      <DataTreeView />
-  );
-}
+export default CategoryTreeView;
