@@ -1,93 +1,65 @@
-import React, { useState } from 'react';
-import Paper from '@mui/material/Paper';
+import React, { useEffect, useState } from "react";
+import Paper from "@mui/material/Paper";
 import {
   TreeDataState,
   CustomTreeData,
-} from '@devexpress/dx-react-grid';
+  SearchState,
+} from "@devexpress/dx-react-grid";
 import {
   Grid,
+  SearchPanel,
   Table,
   TableHeaderRow,
   TableTreeColumn,
-} from '@devexpress/dx-react-grid-material-ui';
+  Toolbar,
+  VirtualTable,
+} from "@devexpress/dx-react-grid-material-ui";
+import { CategoryTree } from "@/types";
 
-// import {
-//   generateRows,
-//   defaultColumnValues,
-// } from '../../../demo-data/generator';
+const getChildRows = (row: any, rootRows: any) => {
+  console.log('row',row);
+  console.log('rootRows',rootRows)
+  return row ? row.items : rootRows;
+};
 
-const getChildRows = (row : any, rootRows : any) => (row ? row.items : rootRows);
+const CategoryDataGridView = ({ data }: { data: CategoryTree[] }) => {
+  const columns = [
+    { name: "name", title: "Name" },
+    { name: "ebay_category", title: "eBay Category" },
+    { name: "amazon_category", title: "Amazon Category" },
+  ];
 
-export default () => {
-  const [columns] = useState([
-    { name: 'name', title: 'Name' },
-    // { name: 'gender', title: 'Gender' },
-    // { name: 'city', title: 'City' },
-    // { name: 'car', title: 'Car' },
-  ]);
-//   const [data] = useState(generateRows({
-//     columnValues: {
-//       ...defaultColumnValues,
-//       items: ({ random }) => (random() > 0.5
-//         ? generateRows({
-//           columnValues: {
-//             ...defaultColumnValues,
-//             items: () => (random() > 0.5
-//               ? generateRows({
-//                 columnValues: {
-//                   ...defaultColumnValues,
-//                 },
-//                 length: Math.trunc(random() * 5) + 1,
-//                 random,
-//               })
-//               : null),
-//           },
-//           length: Math.trunc(random() * 3) + 1,
-//           random,
-//         })
-//         : null),
-//     },
-//     length: 3,
-//   }));
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [expandedRowIds, setExpandedRowIds] = useState<any[]>([]);
 
-const data : any = [
-    {
-        id: 1,
-        name: 'cat1',
-        items: [
-            {        id: 2,
-                name: 'cat 1 - 2',
-                items: null
-            },
-            {        id: 3,
-                name: 'cat 1 - 3',
-                items: null
-            }
-        ]
-    }
-];
-
-//   const [tableColumnExtensions] = useState([
-//     { columnName: 'name', width: 300 },
-//   ]);
+  const toggle = () => {
+    if (expandedRowIds.length > 0) setExpandedRowIds([]);
+    else setExpandedRowIds([0, 1, 11]);
+  };
 
   return (
-    <Paper>
-      <Grid
-        rows={data}
-        columns={columns}
-      >
-        <TreeDataState />
-        <CustomTreeData
-          getChildRows={getChildRows}
-        />
-        <Table
-        />
-        <TableHeaderRow />
-        <TableTreeColumn
-          for="name"
-        />
-      </Grid>
-    </Paper>
+    <>
+      <button type="button" onClick={toggle}>
+        {expandedRowIds.length > 0 ? "Collapse All" : "Expand All"}
+      </button>
+      <Paper>
+        <Grid rows={data} columns={columns}>
+          <TreeDataState
+            expandedRowIds={expandedRowIds}
+            onExpandedRowIdsChange={(expandedRowIds: any) => {
+              console.log("expandedRowIds", expandedRowIds);
+              setExpandedRowIds(expandedRowIds);
+            }}
+          />
+
+          <CustomTreeData getChildRows={getChildRows} />
+          <VirtualTable />
+          <TableHeaderRow />
+          <TableTreeColumn for="name" />
+        </Grid>
+      </Paper>
+    </>
   );
 };
+
+export default CategoryDataGridView;

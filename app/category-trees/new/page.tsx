@@ -27,8 +27,8 @@ const CategoryTreeAdd = () => {
         // 1: (3) ['', '1', 'Mobile Phones']
         //remove header line
         const noHeaderData = results.data.splice(1);
-        const data = buildObjectFromArray(noHeaderData);
-
+        const data : CategoryTree[] = buildObjectFromArray(noHeaderData);
+        console.log('data',data);
         setProcessedTreeArr(data);
       },
       error: (error: any, file: File) => {
@@ -135,7 +135,7 @@ const CategoryTreeAdd = () => {
               </Dropzone>
             </div>
             <div className="col-span-full">
-            <CategoryDataGridView />
+            {/* <CategoryDataGridView /> */}
             </div>
             {processedTreeArr && processedTreeArr.length > 0 && (
               <div className="col-span-full">
@@ -147,9 +147,10 @@ const CategoryTreeAdd = () => {
                 </label>
                 <div className="preview">
                   {processedTreeArr && (
-                    <CategoryTreeView categoryTree={processedTreeArr} />
+                    // <CategoryTreeView categoryTree={processedTreeArr} />
+                    <CategoryDataGridView data={processedTreeArr} />
                   )}
-                  {/* <CategoryDataGridView /> */}
+                  {/* <CategoryDataGridView  /> */}
                 </div>
               </div>
             )}
