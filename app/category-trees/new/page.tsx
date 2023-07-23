@@ -1,5 +1,6 @@
 "use client";
 
+import CategoryDataGridView from "@/components/CategoryDataGridView";
 import CategoryTreeView from "@/components/CategoryTreeView";
 import { buildObjectFromArray } from "@/lib/utils";
 import { CategoryTree } from "@/types";
@@ -133,6 +134,10 @@ const CategoryTreeAdd = () => {
                 )}
               </Dropzone>
             </div>
+            <div className="col-span-full">
+            <CategoryDataGridView />
+            </div>
+
             {processedTreeArr && processedTreeArr.length > 0 && (
               <div className="col-span-full">
                 <label
@@ -145,6 +150,7 @@ const CategoryTreeAdd = () => {
                   {processedTreeArr && (
                     <CategoryTreeView categoryTree={processedTreeArr} />
                   )}
+                  {/* <CategoryDataGridView /> */}
                 </div>
               </div>
             )}
