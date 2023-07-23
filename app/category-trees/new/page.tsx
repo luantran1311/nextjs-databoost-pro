@@ -137,7 +137,6 @@ const CategoryTreeAdd = () => {
             <div className="col-span-full">
             <CategoryDataGridView />
             </div>
-
             {processedTreeArr && processedTreeArr.length > 0 && (
               <div className="col-span-full">
                 <label
