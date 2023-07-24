@@ -17,8 +17,7 @@ import {
 import { CategoryTree } from "@/types";
 
 const getChildRows = (row: any, rootRows: any) => {
-  console.log('row',row);
-  console.log('rootRows',rootRows)
+
   return row ? row.items : rootRows;
 };
 
@@ -32,22 +31,27 @@ const CategoryDataGridView = ({ data }: { data: CategoryTree[] }) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [expandedRowIds, setExpandedRowIds] = useState<any[]>([]);
 
+  const allRowIds = [...Array(2000)].map((x,i)=>i);
+
   const toggle = () => {
     if (expandedRowIds.length > 0) setExpandedRowIds([]);
-    else setExpandedRowIds([0, 1, 11]);
+    else {
+      setExpandedRowIds(allRowIds);
+    }
   };
+  const getRowId = (row : any) => {return row.id;};
 
   return (
     <>
       <button type="button" onClick={toggle}>
         {expandedRowIds.length > 0 ? "Collapse All" : "Expand All"}
       </button>
+      <div id="category-data-grid-view">
       <Paper>
-        <Grid rows={data} columns={columns}>
+        <Grid rows={data} columns={columns} getRowId={getRowId}>
           <TreeDataState
             expandedRowIds={expandedRowIds}
             onExpandedRowIdsChange={(expandedRowIds: any) => {
-              console.log("expandedRowIds", expandedRowIds);
               setExpandedRowIds(expandedRowIds);
             }}
           />
@@ -58,6 +62,7 @@ const CategoryDataGridView = ({ data }: { data: CategoryTree[] }) => {
           <TableTreeColumn for="name" />
         </Grid>
       </Paper>
+      </div>
     </>
   );
 };
