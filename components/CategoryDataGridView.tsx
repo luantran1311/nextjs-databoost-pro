@@ -42,12 +42,11 @@ const CategoryDataGridView = ({ data }: { data: CategoryTree[] }) => {
   const getRowId = (row : any) => {return row.id;};
 
   return (
-    <>
-      <button type="button" onClick={toggle}>
+      <div id="category-data-grid-view">
+      <button type="button" onClick={toggle} className="text-xs text-white bg-blue-600 p-2 rounded-md">
         {expandedRowIds.length > 0 ? "Collapse All" : "Expand All"}
       </button>
-      <div id="category-data-grid-view">
-      <Paper>
+      <Paper className="mt-4">
         <Grid rows={data} columns={columns} getRowId={getRowId}>
           <TreeDataState
             expandedRowIds={expandedRowIds}
@@ -55,7 +54,6 @@ const CategoryDataGridView = ({ data }: { data: CategoryTree[] }) => {
               setExpandedRowIds(expandedRowIds);
             }}
           />
-
           <CustomTreeData getChildRows={getChildRows} />
           <VirtualTable />
           <TableHeaderRow />
@@ -63,7 +61,6 @@ const CategoryDataGridView = ({ data }: { data: CategoryTree[] }) => {
         </Grid>
       </Paper>
       </div>
-    </>
   );
 };
 

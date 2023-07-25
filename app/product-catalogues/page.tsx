@@ -1,3 +1,6 @@
+"use client";
+
+import ProductCatalogueListView from "@/components/ProductCatalogueListView";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
@@ -15,7 +18,12 @@ const ProductCatalogues = () => {
           Add New
         </Link>
       </div>
-      <div className="content mt-8"></div>
+      <div className="content mt-8">
+      <div className="col-span-full">
+                  {/* <ProductCatalogueView /> */}
+                  <ProductCatalogueListView />
+                </div>
+      </div>
     </div>
   );
 };

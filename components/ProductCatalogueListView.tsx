@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -22,42 +24,33 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import Image from "next/image";
 import Link from "next/link";
+import moment from 'moment';
 
 interface Data {
   id: string;
-  image: string;
-  sku: string;
   name: string;
-  price: number;
-  qty: number;
-  mappedShopifyCategory: string;
-  mappedEbayCategory: string;
-  mappedAmazonCategory: string;
+  platform: string;
+  storeUrl: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const rows: Data[] = [
   {
-    id: "aip14",
-    image: "https://imagineonline.store/cdn/shop/products/MPVN3HN_A_1.jpg",
-    sku: "AIP14",
-    name: "Apple iPhone 14",
-    price: 799.99,
-    qty: 10,
-    mappedShopifyCategory: "Mobile Phones/Apple",
-    mappedEbayCategory: "Mobile/Phones/Apple/iPhone",
-    mappedAmazonCategory: "Mobile Phones/Apple/iPhones/iPhone 14/iPhone 14"
+    id: "ct1",
+    name: "Categories from MC",
+    platform: "Magento 2",
+    storeUrl: "https://mydomain.com/",
+    createdAt: moment().format("DD-MMM-YYYY HH:mm:ss"),
+    updatedAt: moment().format("DD-MMM-YYYY HH:mm:ss"),
   },
   {
-    id: "aip14pm",
-    image:
-      "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-max-den-thumb-600x600.jpg",
-    sku: "AIP14PM",
-    name: "Apple iPhone 14 Pro Max",
-    price: 999.99,
-    qty: 15,
-    mappedShopifyCategory: "Mobile Phones/Apple",
-    mappedEbayCategory: "Mobile/Phones/Apple/iPhone",
-    mappedAmazonCategory: "Mobile Phones/Apple/iPhones/iPhone 14/iPhone 14 Pro Max"
+    id: "ct2",
+    name: "Categories from JD",
+    platform: "Shopify",
+    storeUrl: "https://mydomain2.com/",
+    createdAt: moment().format("DD-MMM-YYYY HH:mm:ss"),
+    updatedAt: moment().format("DD-MMM-YYYY HH:mm:ss"),
   },
 ];
 
@@ -111,51 +104,32 @@ interface HeadCell {
 }
 
 const headCells: readonly HeadCell[] = [
-  // {
-  //   id: "id",
-  //   label: "",
-  //   enabledSorting: false,
-  // },
-  {
-    id: "image",
-    label: "Image",
-    enabledSorting: false,
-  },
-  {
-    id: "sku",
-    label: "SKU",
-    enabledSorting: true,
-  },
   {
     id: "name",
-    label: "Product Name",
+    label: "Name",
     enabledSorting: true,
   },
   {
-    id: "price",
-    label: "Price",
-    enabledSorting: false,
+    id: "platform",
+    label: "Platform",
+    enabledSorting: true,
   },
   {
-    id: "qty",
-    label: "Qty",
-    enabledSorting: false,
+    id: "storeUrl",
+    label: "Store URL",
+    enabledSorting: true,
   },
   {
-    id: "mappedShopifyCategory",
-    label: "Shopify Category",
-    enabledSorting: false,
+    id: "createdAt",
+    label: "Date Created",
+    enabledSorting: true,
   },
   {
-    id: "mappedEbayCategory",
-    label: "eBay Category",
-    enabledSorting: false,
+    id: "updatedAt",
+    label: "Last Updated",
+    enabledSorting: true,
   },
-  {
-    id: "mappedAmazonCategory",
-    label: "Amazon Category",
-    enabledSorting: false,
-  },
+
 ];
 
 interface EnhancedTableProps {
@@ -274,7 +248,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function ProductCatalogueView() {
+export default function ProductCatalogueListView() {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -379,26 +353,15 @@ export default function ProductCatalogueView() {
                     key={row.name}
                     selected={isItemSelected}
                   >
-                    <TableCell>
-                      {
-                        <img
-                          className="border max-h-[50px]"
-                          src={row.image}
-                          alt={row.name}
-                        />
-                      }
-                    </TableCell>
-                    <TableCell>{row.sku}</TableCell>
                     <TableCell>{row.name}</TableCell>
-                    <TableCell>${row.price}</TableCell>
-                    <TableCell>{row.qty}</TableCell>
-                    <TableCell>{row.mappedShopifyCategory}</TableCell>
-                    <TableCell>{row.mappedEbayCategory}</TableCell>
-                    <TableCell>{row.mappedAmazonCategory}</TableCell>
+                    <TableCell>{row.platform}</TableCell>
+                    <TableCell><a href={row.storeUrl} target="_blank">{row.storeUrl}</a></TableCell>
+                    <TableCell>{row.createdAt}</TableCell>
+                    <TableCell>{row.updatedAt}</TableCell>
                     <TableCell>
                       <Link
                         className="font-semibold text-blue-700"
-                        href={row.id}
+                        href={`/product-catalogues/${row.id}`}
                       >
                         Details
                       </Link>

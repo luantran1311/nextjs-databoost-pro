@@ -10,6 +10,9 @@ import {
 import { categoryTrees } from "@/dummy_data/category_trees";
 import Link from "next/link";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
+import ProductCatalogueView from "@/components/ProductCatalogueView";
+import CategoryTreeView from "@/components/CategoryTreeView";
+import CategoryTreeListView from "@/components/CategoryTreeListView";
 
 const ItemRow = ({ tree }: { tree: any }) => {
     const ref = useRef<any>();
@@ -97,7 +100,7 @@ const CategoryTrees = () => {
             </div>
             <div className="content mt-8">
                 {categoryTrees.length === 0 && <p>No category trees found.</p>}
-                {categoryTrees.length > 0 && (
+                {/* {categoryTrees.length > 0 && (
                     <table className="table-auto w-full border shadow-lg">
                         <thead>
                             <tr>
@@ -113,7 +116,13 @@ const CategoryTrees = () => {
                             })}
                         </tbody>
                     </table>
-                )}
+                )} */}
+                <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="col-span-full">
+                  {/* <ProductCatalogueView /> */}
+                  <CategoryTreeListView />
+                </div>
+              </div>
             </div>
         </div>
     );

@@ -11,7 +11,7 @@ const ProductCataloguesAdd = () => {
     <div className="product-catalogues-add">
       <div className="heading flex justify-between">
         <h3 className="text-3xl font-bold text-red-600">
-          Add New Product Catalogues
+          New Product Catalogue
         </h3>
       </div>
       <div className="content mt-8">
@@ -21,8 +21,8 @@ const ProductCataloguesAdd = () => {
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 General
               </h2>
-              <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                <div className="col-span-full">
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
+                <div className="col-span-1">
                   <label
                     htmlFor="name"
                     className="block text-sm font-medium leading-6 text-gray-900"
@@ -43,7 +43,7 @@ const ProductCataloguesAdd = () => {
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Store Details
               </h2>
-              <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
                 <div className="col-span-full">
                   <label
                     htmlFor="platform"
@@ -80,7 +80,7 @@ const ProductCataloguesAdd = () => {
                     />
                   </div>
                 </div>
-                <div className="sm:col-span-3">
+                <div className="col-span-full md:col-span-1">
                   <label
                     htmlFor="http-username"
                     className="block text-sm font-medium leading-6 text-gray-900"
@@ -97,7 +97,7 @@ const ProductCataloguesAdd = () => {
                     />
                   </div>
                 </div>
-                <div className="sm:col-span-3">
+                <div className="col-span-full md:col-span-1">
                   <label
                     htmlFor="http-password"
                     className="block text-sm font-medium leading-6 text-gray-900"
@@ -142,7 +142,7 @@ const ProductCataloguesAdd = () => {
           </div>
         </form>
         <div className="product-catalogues-view">
-        <div className="space-y-12">
+          <div className="space-y-12">
             <div className="border-b border-gray-900/10 pb-12">
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Product Catalogues Preview
@@ -150,11 +150,9 @@ const ProductCataloguesAdd = () => {
               <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div className="col-span-full">
                   <ProductCatalogueView />
-
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>

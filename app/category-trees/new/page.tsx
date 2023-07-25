@@ -45,7 +45,7 @@ const CategoryTreeAdd = () => {
     <div className="category-tree-add">
       <div className="heading flex justify-between">
         <h3 className="text-3xl font-bold text-red-600">
-          Add A New Category Tree
+          New Category Tree
         </h3>
         {/* <Link href="/category-trees/new" className="inline-flex items-center py-1 px-2 rounded-md hover:bg-slate-100">
             <PlusCircleIcon className="w-8 h-8 mr-1" />
@@ -134,9 +134,6 @@ const CategoryTreeAdd = () => {
                 )}
               </Dropzone>
             </div>
-            <div className="col-span-full">
-            {/* <CategoryDataGridView /> */}
-            </div>
             {processedTreeArr && processedTreeArr.length > 0 && (
               <div className="col-span-full">
                 <label
@@ -145,7 +142,7 @@ const CategoryTreeAdd = () => {
                 >
                   Preview
                 </label>
-                <div className="preview">
+                <div className="preview mt-2">
                   {processedTreeArr && (
                     // <CategoryTreeView categoryTree={processedTreeArr} />
                     <CategoryDataGridView data={processedTreeArr} />

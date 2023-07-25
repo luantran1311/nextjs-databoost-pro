@@ -11,7 +11,7 @@ const poppins = Poppins({
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en" className="">
+    <html lang="en" className="" suppressHydrationWarning>
       <body
         style={{ margin: 0 }}
         className={[poppins.className, "bg-black-800"].join(" ")}
@@ -20,7 +20,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         <div id="main" className="flex">
           <Sidebar />
           <div id="content" className="w-full py-6 px-4 ml-[300px]">
-            <div className="wrapper max-w-[1024px] m-auto">
+            <div className="wrapper m-auto px-8">
               {children}
             </div>
           </div>
