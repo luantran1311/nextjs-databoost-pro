@@ -23,6 +23,7 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "antd": "^5.7.1",
+    "axios": "^1.4.0",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "moment": "^2.29.4",
@@ -33,6 +34,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.2",
     "react-papaparse": "^4.1.0",
+    "swr": "^2.2.0",
     "typescript": "5.1.6",
     "uuidv4": "^6.2.13"
   },
