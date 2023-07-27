@@ -30,36 +30,36 @@ interface Data {
   name: string;
   price: number;
   qty: number;
-  mappedShopifyCategory: string;
-  mappedEbayCategory: string;
-  mappedAmazonCategory: string;
+  shopifyCategory: string;
+  eBayCategory: string;
+  amazonCategory: string;
 }
 
-const rows: Data[] = [
-  {
-    id: "aip14",
-    image: "https://imagineonline.store/cdn/shop/products/MPVN3HN_A_1.jpg",
-    sku: "AIP14",
-    name: "Apple iPhone 14",
-    price: 799.99,
-    qty: 10,
-    mappedShopifyCategory: "Mobile Phones/Apple",
-    mappedEbayCategory: "Mobile/Phones/Apple/iPhone",
-    mappedAmazonCategory: "Mobile Phones/Apple/iPhones/iPhone 14/iPhone 14"
-  },
-  {
-    id: "aip14pm",
-    image:
-      "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-max-den-thumb-600x600.jpg",
-    sku: "AIP14PM",
-    name: "Apple iPhone 14 Pro Max",
-    price: 999.99,
-    qty: 15,
-    mappedShopifyCategory: "Mobile Phones/Apple",
-    mappedEbayCategory: "Mobile/Phones/Apple/iPhone",
-    mappedAmazonCategory: "Mobile Phones/Apple/iPhones/iPhone 14/iPhone 14 Pro Max"
-  },
-];
+// const rows: Data[] = [
+//   {
+//     id: "aip14",
+//     image: "https://imagineonline.store/cdn/shop/products/MPVN3HN_A_1.jpg",
+//     sku: "AIP14",
+//     name: "Apple iPhone 14",
+//     price: 799.99,
+//     qty: 10,
+//     shopifyCategory: "Mobile Phones/Apple",
+//     eBayCategory: "Mobile/Phones/Apple/iPhone",
+//     amazonCategory: "Mobile Phones/Apple/iPhones/iPhone 14/iPhone 14"
+//   },
+//   {
+//     id: "aip14pm",
+//     image:
+//       "https://cdn.tgdd.vn/Products/Images/42/251192/iphone-14-pro-max-den-thumb-600x600.jpg",
+//     sku: "AIP14PM",
+//     name: "Apple iPhone 14 Pro Max",
+//     price: 999.99,
+//     qty: 15,
+//     shopifyCategory: "Mobile Phones/Apple",
+//     eBayCategory: "Mobile/Phones/Apple/iPhone",
+//     amazonCategory: "Mobile Phones/Apple/iPhones/iPhone 14/iPhone 14 Pro Max"
+//   },
+// ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -142,17 +142,17 @@ const headCells: readonly HeadCell[] = [
     enabledSorting: false,
   },
   {
-    id: "mappedShopifyCategory",
+    id: "shopifyCategory",
     label: "Shopify Category",
     enabledSorting: false,
   },
   {
-    id: "mappedEbayCategory",
+    id: "eBayCategory",
     label: "eBay Category",
     enabledSorting: false,
   },
   {
-    id: "mappedAmazonCategory",
+    id: "amazonCategory",
     label: "Amazon Category",
     enabledSorting: false,
   },
@@ -185,13 +185,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead>
-      <TableRow>
+    <TableHead >
+      <TableRow >
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             sortDirection={orderBy === headCell.id ? order : false}
-            className="font-bold"
+            style={{fontWeight:"bold"}}
           >
             {headCell.enabledSorting && (
               <TableSortLabel
@@ -274,7 +274,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function ProductCatalogueView() {
+export default function ProductCatalogueView(props :any) {
+  const rows : Data[] = props.data;
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("name");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
@@ -321,7 +322,7 @@ export default function ProductCatalogueView() {
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+    console.log('newPage',newPage);
   };
 
   const handleChangeRowsPerPage = (
@@ -357,6 +358,7 @@ export default function ProductCatalogueView() {
             size={dense ? "small" : "medium"}
           >
             <EnhancedTableHead
+            
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
@@ -379,26 +381,26 @@ export default function ProductCatalogueView() {
                     key={row.name}
                     selected={isItemSelected}
                   >
-                    <TableCell>
-                      {
+                    <TableCell style={{display:"flex", justifyContent:"center"}}>
+                      
                         <img
                           className="border max-h-[50px]"
                           src={row.image}
                           alt={row.name}
                         />
-                      }
+                      
                     </TableCell>
                     <TableCell>{row.sku}</TableCell>
                     <TableCell>{row.name}</TableCell>
-                    <TableCell>${row.price}</TableCell>
+                    <TableCell>${row.price.toFixed(2)}</TableCell>
                     <TableCell>{row.qty}</TableCell>
-                    <TableCell>{row.mappedShopifyCategory}</TableCell>
-                    <TableCell>{row.mappedEbayCategory}</TableCell>
-                    <TableCell>{row.mappedAmazonCategory}</TableCell>
+                    <TableCell>{row.shopifyCategory}</TableCell>
+                    <TableCell>{row.eBayCategory}</TableCell>
+                    <TableCell>{row.amazonCategory}</TableCell>
                     <TableCell>
                       <Link
                         className="font-semibold text-blue-700"
-                        href={row.id}
+                        href={row.sku}
                       >
                         Details
                       </Link>
@@ -418,15 +420,6 @@ export default function ProductCatalogueView() {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[20, 50]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
     </Box>
   );

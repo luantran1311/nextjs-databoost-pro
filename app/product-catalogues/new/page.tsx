@@ -2,7 +2,7 @@
 
 import ProductCatalogueView from "@/components/ProductCatalogueView";
 import { fetcher } from "@/lib/swrFetcher";
-import React from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
@@ -15,6 +15,8 @@ type Inputs = {
 };
 
 const ProductCataloguesAdd = () => {
+  const [productCatalogueList, setProductCatalogueList] = useState<any>([]);
+
   const {
     register,
     handleSubmit,
@@ -38,7 +40,7 @@ const ProductCataloguesAdd = () => {
           },
         }
       )
-      .then((res: any) => console.log("res", res));
+      .then((res: any) => setProductCatalogueList(res.data.items));
   };
 
   //if (data)
@@ -147,16 +149,18 @@ const ProductCataloguesAdd = () => {
                   </button>
                 </div>
               </div>
-              <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base font-semibold leading-7 text-gray-900">
-                  Product Catalogues Preview
-                </h2>
-                <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="col-span-full">
-                    <ProductCatalogueView />
+              {productCatalogueList.length > 0 && (
+                <div className="border-b border-gray-900/10 pb-12">
+                  <h2 className="text-base font-semibold leading-7 text-gray-900">
+                    Product Catalogues Preview
+                  </h2>
+                  <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="col-span-full">
+                      <ProductCatalogueView data={productCatalogueList} />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </form>
         </div>

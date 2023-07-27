@@ -1,0 +1,23 @@
+Parent Category ID,Category ID,Category Name
+,1,Mobile Phones
+1,2,Apple
+1,3,Samsung
+,4,Tablets
+4,5,Apple
+4,6,Samsung
+,9,Drones
+9,10,DJI
+9,11,GoPro
+4,7,Huawei
+4,8,Oppo
+,125,Accessories
+125,74,Mobile Phones
+125,86,Tablets
+125,236,Cameras
+74,986,Apple
+74,723,Samsung
+86,110,Apple
+86,563,Samsung
+86,453,Motorola
+236,998,Cannon
+236,654,Nikon

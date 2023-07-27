@@ -80,7 +80,7 @@ const CategoryTreeAdd = () => {
               </label>
               <p className="mt-1 text-sm leading-6 text-gray-600">
                 Download{" "}
-                <a href="#" className="text-blue-600 underline" download={true}>
+                <a href="/category-trees/sample.csv" className="text-blue-600 underline" download={true}>
                   sample import file
                 </a>
               </p>
