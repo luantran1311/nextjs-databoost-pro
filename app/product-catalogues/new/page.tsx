@@ -2,11 +2,14 @@
 
 import ProductCatalogueView from "@/components/ProductCatalogueView";
 import { fetcher } from "@/lib/swrFetcher";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
 import LoadingIcon from "@/components/LoadingIcon";
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 
 type Inputs = {
   name: string;
@@ -30,7 +33,8 @@ const ProductCataloguesAdd = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onFormSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-  const onConnectionTest = async () => {
+
+  const fetchProducts = async() => {
     setLoading(true);
     const storeUrl = watch("storeUrl");
     const accessToken = watch("accessToken");
@@ -55,7 +59,15 @@ const ProductCataloguesAdd = () => {
         setMaxPage(Math.ceil(res.data.total_count / productsPerPage));
       })
       .finally(() => setLoading(false));
-  };
+  }
+
+  useEffect(() => {
+    //if the table has items, then fetch products base on pages, rows per page
+    if(productCatalogueList && productCatalogueList.length > 0) {
+      console.log('ue');
+      fetchProducts();
+    }
+  },[currentPage,productsPerPage]);
 
   const handlePageChange = async (e: any, action: string) => {
     console.log('changed')
@@ -71,37 +83,45 @@ const ProductCataloguesAdd = () => {
         }
         return;
       default:
-        setCurrentPage(e.target.value);
+        //submit when Enter key is pressed
+        if(e.key === "Enter") setCurrentPage(e.target.value);
         return;
     }
   };
 
+
   const TableActionGroup = () => {
     return (
-      <div className="action-group flex justify-between items-center">
+      <div className="action-group flex justify-between items-center my-4">
         <div className="left">
           <p>{totalProductCount} products</p>
         </div>
-        <div className="right">
+        <div className="right flex justify-evenly items-center gap-2">
           <button
+            className="bg-slate-300 py-2 px-1 rounded-md"
             type="button"
             onClick={(e: any) => handlePageChange(e, "prev")}
           >
-            Previous Page
+            <ChevronLeftIcon />
+            <span className="hidden">Previous Page</span>
           </button>
           <input
+            className="block w-20 text-center rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             type="number"
             defaultValue={currentPage}
             min={1}
             max={maxPage}
-            onChange={(e: any) => handlePageChange(e, "")}
+            onKeyDown={(e: any) => handlePageChange(e, "")}
           />
-          <p>{maxPage}</p>
+          <span className="block mr-1">of {maxPage}</span>
           <button
+                      className="bg-slate-300 py-2 px-1 rounded-md"
+
             type="button"
             onClick={(e: any) => handlePageChange(e, "next")}
           >
-            Next Page
+            <span className="hidden">Next Page</span>
+            <ChevronRightIcon />
           </button>
         </div>
       </div>
@@ -201,10 +221,10 @@ const ProductCataloguesAdd = () => {
                 <div className="mt-6 flex items-center justify-end gap-x-6">
                   <button
                     type="button"
-                    onClick={onConnectionTest}
+                    onClick={fetchProducts}
                     className="rounded-md px-3 py-2 text-sm font-semibold text-indigo-600"
                   >
-                    Test Connection
+                    Preview Products
                   </button>
                   <button
                     type="submit"
@@ -216,13 +236,14 @@ const ProductCataloguesAdd = () => {
               </div>
             </div>
           </form>
+          <div className="border-b border-gray-900/10">
           {loading && (
-            <div className="col-span-full">
+            <div className="col-span-full my-12">
               <LoadingIcon />
             </div>
           )}
           {!loading && productCatalogueList.length > 0 && (
-            <div className="border-b border-gray-900/10 pb-12">
+            <div className="my-12">
               <h2 className="text-base font-semibold leading-7 text-gray-900">
                 Product Catalogues Preview
               </h2>
@@ -235,6 +256,7 @@ const ProductCataloguesAdd = () => {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     );

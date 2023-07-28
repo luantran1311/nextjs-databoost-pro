@@ -19,7 +19,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         <Header />
         <div id="main" className="flex">
           <Sidebar />
-          <div id="content" className="w-full py-6 px-4 ml-[300px]">
+          <div id="content" className="w-full py-6 px-4">
             <div className="wrapper m-auto px-8">
               {children}
             </div>
