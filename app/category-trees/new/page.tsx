@@ -2,6 +2,7 @@
 
 import CategoryDataGridView from "@/components/CategoryDataGridView";
 import CategoryTreeView from "@/components/CategoryTreeView";
+import LoadingIcon from "@/components/LoadingIcon";
 import { buildObjectFromArray } from "@/lib/utils";
 import { CategoryTree } from "@/types";
 import { DocumentIcon } from "@heroicons/react/24/solid";
@@ -10,6 +11,7 @@ import React, { useCallback, useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
 
 const CategoryTreeAdd = () => {
+  const [loading, setLoading] = useState(false);
   const onDrop = useCallback((acceptedFiles: any) => {
     // Do something with the files
   }, []);
@@ -27,8 +29,8 @@ const CategoryTreeAdd = () => {
         // 1: (3) ['', '1', 'Mobile Phones']
         //remove header line
         const noHeaderData = results.data.splice(1);
-        const data : CategoryTree[] = buildObjectFromArray(noHeaderData);
-        console.log('data',data);
+        const data: CategoryTree[] = buildObjectFromArray(noHeaderData);
+        console.log("data", data);
         setProcessedTreeArr(data);
       },
       error: (error: any, file: File) => {
@@ -44,9 +46,7 @@ const CategoryTreeAdd = () => {
   return (
     <div className="category-tree-add">
       <div className="heading flex justify-between">
-        <h3 className="text-3xl font-bold text-red-600">
-          New Category Tree
-        </h3>
+        <h3 className="text-3xl font-bold text-red-600">New Category Tree</h3>
         {/* <Link href="/category-trees/new" className="inline-flex items-center py-1 px-2 rounded-md hover:bg-slate-100">
             <PlusCircleIcon className="w-8 h-8 mr-1" />
             Add New
@@ -80,14 +80,20 @@ const CategoryTreeAdd = () => {
               </label>
               <p className="mt-1 text-sm leading-6 text-gray-600">
                 Download{" "}
-                <a href="/category-trees/sample.csv" className="text-blue-600 underline" download={true}>
+                <a
+                  href="/category-trees/sample.csv"
+                  className="text-blue-600 underline"
+                  download={true}
+                >
                   sample import file
                 </a>
               </p>
               <Dropzone
                 onDrop={(acceptedFiles: any[]) => {
+                  setLoading(true);
                   setFile(acceptedFiles[0]);
                   handleParse(acceptedFiles[0]);
+                  setLoading(false);
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -134,6 +140,13 @@ const CategoryTreeAdd = () => {
                 )}
               </Dropzone>
             </div>
+
+            {loading && (
+              <div className="col-span-full">
+                <LoadingIcon />
+              </div>
+            )}
+
             {processedTreeArr && processedTreeArr.length > 0 && (
               <div className="col-span-full">
                 <label

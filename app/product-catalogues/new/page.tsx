@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import useSWR from "swr";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import LoadingIcon from "@/components/LoadingIcon";
 
 type Inputs = {
   name: string;
@@ -15,7 +16,12 @@ type Inputs = {
 };
 
 const ProductCataloguesAdd = () => {
+  const [loading, setLoading] = useState(false);
   const [productCatalogueList, setProductCatalogueList] = useState<any>([]);
+  const [totalProductCount, setTotalProductCount] = useState<number>(0);
+  const [productsPerPage, setProductPerPage] = useState<number>(20);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [maxPage, setMaxPage] = useState<number>(0);
 
   const {
     register,
@@ -25,6 +31,7 @@ const ProductCataloguesAdd = () => {
   } = useForm<Inputs>();
   const onFormSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
   const onConnectionTest = async () => {
+    setLoading(true);
     const storeUrl = watch("storeUrl");
     const accessToken = watch("accessToken");
     const response = await axios
@@ -33,6 +40,8 @@ const ProductCataloguesAdd = () => {
         {
           storeUrl,
           accessToken,
+          productsPerPage,
+          currentPage,
         },
         {
           headers: {
@@ -40,7 +49,63 @@ const ProductCataloguesAdd = () => {
           },
         }
       )
-      .then((res: any) => setProductCatalogueList(res.data.items));
+      .then((res: any) => {
+        setTotalProductCount(res.data.total_count);
+        setProductCatalogueList(res.data.items);
+        setMaxPage(Math.ceil(res.data.total_count / productsPerPage));
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const handlePageChange = async (e: any, action: string) => {
+    console.log('changed')
+    switch (action) {
+      case "prev":
+        if (currentPage > 1) {
+          setCurrentPage(currentPage - 1);
+        }
+        return;
+      case "next":
+        if (currentPage < maxPage) {
+          setCurrentPage(currentPage + 1);
+        }
+        return;
+      default:
+        setCurrentPage(e.target.value);
+        return;
+    }
+  };
+
+  const TableActionGroup = () => {
+    return (
+      <div className="action-group flex justify-between items-center">
+        <div className="left">
+          <p>{totalProductCount} products</p>
+        </div>
+        <div className="right">
+          <button
+            type="button"
+            onClick={(e: any) => handlePageChange(e, "prev")}
+          >
+            Previous Page
+          </button>
+          <input
+            type="number"
+            defaultValue={currentPage}
+            min={1}
+            max={maxPage}
+            onChange={(e: any) => handlePageChange(e, "")}
+          />
+          <p>{maxPage}</p>
+          <button
+            type="button"
+            onClick={(e: any) => handlePageChange(e, "next")}
+          >
+            Next Page
+          </button>
+        </div>
+      </div>
+    );
   };
 
   //if (data)
@@ -149,20 +214,27 @@ const ProductCataloguesAdd = () => {
                   </button>
                 </div>
               </div>
-              {productCatalogueList.length > 0 && (
-                <div className="border-b border-gray-900/10 pb-12">
-                  <h2 className="text-base font-semibold leading-7 text-gray-900">
-                    Product Catalogues Preview
-                  </h2>
-                  <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div className="col-span-full">
-                      <ProductCatalogueView data={productCatalogueList} />
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </form>
+          {loading && (
+            <div className="col-span-full">
+              <LoadingIcon />
+            </div>
+          )}
+          {!loading && productCatalogueList.length > 0 && (
+            <div className="border-b border-gray-900/10 pb-12">
+              <h2 className="text-base font-semibold leading-7 text-gray-900">
+                Product Catalogues Preview
+              </h2>
+              <div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="col-span-full">
+                  <TableActionGroup />
+                  <ProductCatalogueView data={productCatalogueList} />
+                  <TableActionGroup />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
